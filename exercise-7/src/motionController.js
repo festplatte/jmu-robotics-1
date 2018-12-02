@@ -11,7 +11,9 @@ module.exports = function(w0, w1, T) {
   let currentW = w0;
 
   for (let t = 0; t <= T; t += deltaT) {
-    const newW = mathjs.multiply(w1, kCalc.speedDist(t, T, tau));
-    // TODO implement rest of the calculations
+    const wd = mathjs.multiply(w1, kCalc.speedDist(t, T, tau));
+    const wdt = mathjs.divide(mathjs.subtract(newW, currentW), deltaT);
+    const qdt = kCalc.calcVelocityJointVariables(currentW, currentQ, wdt);
+    // TODO implement rest
   }
 };
