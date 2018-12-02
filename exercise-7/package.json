@@ -1,0 +1,24 @@
+{
+  "name": "robotics-1-exercise-7",
+  "version": "1.0.0",
+  "description": "Implementation of task7-1",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/festplatte/robotics-1-exercise-7.git"
+  },
+  "bugs": {
+    "url": "https://github.com/festplatte/robotics-1-exercise-7/issues"
+  },
+  "homepage": "https://github.com/festplatte/robotics-1-exercise-7#readme",
+  "devDependencies": {
+    "nodemon": "^1.18.6"
+  },
+  "dependencies": {
+    "mathjs": "^5.2.3"
+  }
+}
