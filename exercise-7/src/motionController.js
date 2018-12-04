@@ -11,9 +11,19 @@ module.exports = function(w0, w1, T) {
   let currentW = w0;
 
   for (let t = 0; t <= T; t += deltaT) {
-    const wd = mathjs.multiply(w1, kCalc.speedDist(t, T, tau));
-    const wdt = mathjs.divide(mathjs.subtract(newW, currentW), deltaT);
-    const qdt = kCalc.calcVelocityJointVariables(currentW, currentQ, wdt);
-    // TODO implement rest
+    const s = kCalc.speedDist(t, T, tau);
+    const wd = mathjs.add(mathjs.multiply(w0, 1 - s), mathjs.multiply(w1, s));
+    const dwd = mathjs.divide(mathjs.subtract(wd, currentW), deltaT);
+    const dqd = kCalc.calcVelocityJointVariables(currentW, dwd, currentQ);
+    currentQ = mathjs.add(currentQ, mathjs.multiply(dqd, deltaT));
+    currentW = kCalc.calcToolConfigurationVector(currentQ);
+
+    console.log(`t: ${t}, s: ${s}`);
+    console.log(`wd: ${wd}`);
+    console.log(`dwd: ${dwd}`);
+    console.log(`dqd: ${dqd}`);
+    console.log(`q: ${q}`);
+    console.log(`w: ${w}`);
+    console.log(`wd - w: ${mathjs.subtract(wd, w)}`);
   }
 };
