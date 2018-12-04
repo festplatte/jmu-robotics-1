@@ -1,6 +1,7 @@
 function rhino(i)
     % i: Determine which destination position to use
-
+    i = 1;
+    
     % tool-configuration start position
     w0 = [ 0.45; 0; 0.05; 0; 0; -0.60653; ];
 
@@ -22,6 +23,18 @@ function rhino(i)
     % initialize current joint variables according to inverse kinematics of
     % start position
     q = qw(w);
+    
+    % parameters for cubic polynomial interpolation
+    cp_d = w0;
+    cp_c = 0;
+    cp_v1 = (w1 - w0) / T;
+    cp_v0 = 0;
+    cp_a = (T * (cp_v1 + cp_v0) - 2 * (w1 - w0)) / T^3;
+    cp_b = -((T * (cp_v1 + 2*cp_v0) - 3 * (w1 - w0)) / T^2);
+    
+    % parameters for plotting
+    last_w_d = w0;
+    last_w_d_cp = w0;
 
     % loop until time T in steps of sampling time dt
     for t = 0:dt:T
@@ -30,14 +43,23 @@ function rhino(i)
 
         % calculate desired tool-configuration vector by interpolating the
         % straight line between w0 and w1 according to s
+        w_d_cp = cp_a * t^3 + cp_b * t^2 + cp_c + t + cp_d;
         w_d = w0*(1 - s) + w1*s;
+        
+        % plot the difference
+        plot3([last_w_d(4), w_d(4)], [last_w_d(5), w_d(5)], [last_w_d(6), w_d(6)], 'Color', 'b', 'LineWidth', 4);
+        hold on;
+        plot3([last_w_d_cp(4), w_d_cp(4)], [last_w_d_cp(5), w_d_cp(5)], [last_w_d_cp(6), w_d_cp(6)], 'Color', 'r', 'LineWidth', 4);
+        hold on;
+        last_w_d = w_d;
+        last_w_d_cp = w_d_cp;
 
         % check if w_d is valid, if not qw issues a warning
-        qw(w_d);
+        qw(w_d_cp);
 
         % compute desired tool-configuration velocities to reach w_d within
         % one sampling instant
-        dw_d = (w_d - w) / dt;
+        dw_d = (w_d_cp - w) / dt;
         
         % compute desired joint-space velocities for reaching w_d
         dq_d = dqw(w, dw_d, q);
@@ -52,7 +74,7 @@ function rhino(i)
 
         % output
         disp(['t:    ' num2str(t) ', s: ' num2str(s)]);
-        disp(['w_d:  ' num2str(w_d', '%12.4f')]);
+        disp(['w_d:  ' num2str(w_d_cp', '%12.4f')]);
         disp(['dw_d: ' num2str(dw_d', '%12.4f')]);
         disp(['dq_d: ' num2str(dq_d', '%12.4f')]);
         disp(['q:    ' num2str(q', '%12.4f')]);
