@@ -1,3 +1,5 @@
+global x = [11/16, -17/48, 0, 2, 11/1024, 0, -33/16, 5];
+
 function plotTrajectory()
   t = 0:0.1:3;
   w = w1(t);
@@ -12,14 +14,14 @@ end
 
 % first path
 function y = w1(t)
-  x = [11/16, -17/48, 0, 2];
+  global x;
   y = x(1) * t.^3 + x(2) * t.^2 + x(3) * t + x(4);
 end
 
 % second path
 function y = w2(t)
-  x = [11/1024, 0, -33/16, 5];
-  y = x(1) * (t - 3).^3 + x(2) * (t - 3).^2 + x(3) * (t - 3) + x(4);
+  global x;
+  y = x(5) * (t - 3).^3 + x(5) * (t - 3).^2 + x(7) * (t - 3) + x(8);
 end
 
 function plotVelocity()
@@ -36,14 +38,14 @@ end
 
 % first path
 function y = dw1(t)
-  x = [11/16, -17/48, 0, 2];
+  global x;
   y = 3 * x(1) * t.^2 + 2 * x(2) * t + x(3);
 end
 
 % second path
 function y = dw2(t)
-  x = [11/1024, 0, -33/16, 5];
-  y = 3 * x(1) * (t - 3).^2 + 2 * x(2) * (t - 3) + x(3);
+  global x;
+  y = 3 * x(5) * (t - 3).^2 + 2 * x(6) * (t - 3) + x(7);
 end
 
 function plotAcceleration()
@@ -60,12 +62,12 @@ end
 
 % first path
 function y = ddw1(t)
-  x = [11/16, -17/48, 0, 2];
+  global x;
   y = 6 * x(1) * t + 2 * x(2);
 end
 
 % second path
 function y = ddw2(t)
-  x = [11/1024, 0, -33/16, 5];
-  y = 6 * x(1) * (t - 3) + 2 * x(2);
+  global x;
+  y = 6 * x(5) * (t - 3) + 2 * x(6);
 end
