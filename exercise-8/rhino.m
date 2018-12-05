@@ -47,9 +47,9 @@ function rhino(i)
         w_d = w0*(1 - s) + w1*s;
         
         % plot the difference
-        plot3([last_w_d(4), w_d(4)], [last_w_d(5), w_d(5)], [last_w_d(6), w_d(6)], 'Color', 'b', 'LineWidth', 4);
+        plot3([last_w_d(1), w_d(1)], [last_w_d(2), w_d(2)], [last_w_d(3), w_d(3)], 'Color', 'b', 'LineWidth', 4);
         hold on;
-        plot3([last_w_d_cp(4), w_d_cp(4)], [last_w_d_cp(5), w_d_cp(5)], [last_w_d_cp(6), w_d_cp(6)], 'Color', 'r', 'LineWidth', 4);
+        plot3([last_w_d_cp(1), w_d_cp(1)], [last_w_d_cp(2), w_d_cp(2)], [last_w_d_cp(3), w_d_cp(3)], 'Color', 'r', 'LineWidth', 4);
         hold on;
         last_w_d = w_d;
         last_w_d_cp = w_d_cp;
