@@ -35,11 +35,13 @@ function qw_result = qw(w)
   qw_result = [q1, q2];
 end
 
-% TODO implement
 function qd = qdot(w, wdot)
-  q1 = atan2(-w(2), w(1));
-  q2 = w(1) / -sin(q1);
-  qd = [q1, q2];
+  q = qw(w);
+  qd1 = (-wdot(1)*w(2) + wdot(2)*w(1)) / (w(2)^2 + w(1)^2);
+  s1 = sin(q(1));
+  c1 = cos(q(2));
+  qd2 = (wdot(1)*s1 - w(1)*c1) / s1^2;
+  qd = [qd1, qd2];
 end
 
 % TODO implement
