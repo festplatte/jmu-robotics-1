@@ -30,7 +30,7 @@ function wq_result = wq(q)
 end
 
 function qw_result = qw(w)
-  q1 = atan2(w(2), -w(1));
+  q1 = atan2(-w(2), w(1));
   q2 = w(1) / -sin(q1);
   qw_result = [q1, q2];
 end
@@ -39,16 +39,29 @@ function qd = qdot(w, wdot)
   q = qw(w);
   qd1 = (-wdot(1)*w(2) + wdot(2)*w(1)) / (w(2)^2 + w(1)^2);
   s1 = sin(q(1));
-  c1 = cos(q(2));
-  qd2 = (wdot(1)*s1 - w(1)*c1) / s1^2;
+  c1 = cos(q(1));
+  qd2 = (-wdot(1)*s1 + w(1)*c1*qd1) / s1^2;
   qd = [qd1, qd2];
 end
 
-% TODO implement
 function qdd = qddot(w, wdot, wddot)
-  q1 = atan2(w(2), -w(1));
-  q2 = w(1) / -sin(q1);
-  qdd = [q1, q2];
+  x1 = -wdot(1)*w(2) + wdot(2)*w(1);
+  xd1 = -wddot(1)*w(2) + wddot(2)*w(1);
+  y1 = w(2)^2 + w(1)^2;
+  yd1 = 2*w(2)*wdot(2) + 2*w(1)*wdot(1);
+  qdd1 = (xd1*y1 - x1*yd1) / y1^2;
+  
+  q = qw(w);
+  qd = qdot(w, wdot);
+  s1 = sin(q(1));
+  c1 = cos(q(1));
+  x2 = -wdot(1)*s1 + w(1)*c1*qd1;
+  xd2 = -wddot(1)*s1 - wdot(1)*c1*qd(1) + wdot(1)*c1*qd(1) - w(1)*s1*qd(1)^2 + w(1)*c1*qdd1;
+  y2 = s1^2;
+  yd2 = 2*s1*c1*qd(1);
+  qdd2 = (xd2*y2 - x2*yd2) / y2^2;
+  
+  qdd = [qdd1, qdd2];
 end
 
 T = 10;
