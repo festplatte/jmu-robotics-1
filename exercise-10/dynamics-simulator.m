@@ -64,6 +64,11 @@ function qdd = qddot(w, wdot, wddot)
   qdd = [qdd1, qdd2];
 end
 
+function torques(q, qdot, qddot)
+  c1 = [0, 0.1, 0];
+  c2 = [0, -q(2)/2, 0];
+end
+
 T = 10;
 t = 0:0.1:T;
 sdd = sddot(t, T);
