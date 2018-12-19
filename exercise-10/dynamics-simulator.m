@@ -67,16 +67,5 @@ end
 function torques(q, qdot, qddot)
   c1 = [0, 0.1, 0];
   c2 = [0, -q(2)/2, 0];
+  % TODO: implement rest
 end
-
-T = 10;
-t = 0:0.1:T;
-sdd = sddot(t, T);
-sd = sdot(t, T);
-s_result = s(t, T);
-plot(t,sdd);
-hold on;
-plot(t,sd);
-hold on;
-plot(t,s_result);
-hold on;
