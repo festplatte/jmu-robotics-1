@@ -2,6 +2,7 @@
 \usepackage[utf8]{inputenc}
 % \usepackage[ngerman]{babel}
 \usepackage {graphicx}
+\usepackage{amsmath}
 
 \begin{document}
 	\author{Michael Gabler}
@@ -17,6 +18,102 @@
 	
 	\section{Tasks}
 	\subsection{Task 3.1}
-	$\varphi = \arctan(\frac{\tan \varphi_{r}}{1-\frac{d}{2l}\tan \varphi_{r}})$
+	\paragraph{Proof for $\varphi = \arctan(\frac{\tan \varphi_{r}}{1-\frac{d}{2l}\tan \varphi_{r}})$}
+	
+	\begin{gather}
+	\tan \varphi = \frac{l}{r}
+	\Leftrightarrow
+	r = \frac{l}{\tan \varphi}
+	\end{gather}
+	\begin{gather}
+	\nonumber \tan \varphi_{r} = \frac{l}{r + \frac{d}{2}} \Rightarrow 
+	\tan \varphi_{r} = \frac{l}{\frac{l}{\tan \varphi} + \frac{d}{2}} = \tan \varphi + \frac{2l}{d}
+	\Leftrightarrow\\
+	\nonumber \tan \varphi = \tan \varphi_{r} - \frac{2l}{d} = (1 - \frac{2l}{d \tan \varphi_{r}}) \tan \varphi_{r} = \frac{\tan \varphi_{r}}{1 - \frac{d}{2l} \tan \varphi_{r}}
+	\Leftrightarrow\\
+	\varphi = \arctan(\frac{\tan \varphi_{r}}{1-\frac{d}{2l}\tan \varphi_{r}})
+	\end{gather}
+	
+	\paragraph{Proof for $\varphi = \arctan(\frac{\tan \varphi_{l}}{1+\frac{d}{2l}\tan \varphi_{l}})$}
+	
+	\begin{gather}
+	\nonumber \tan \varphi_{l} = \frac{l}{r - \frac{d}{2}} \Rightarrow 
+	\tan \varphi_{l} = \frac{l}{\frac{l}{\tan \varphi} - \frac{d}{2}} = \tan \varphi - \frac{2l}{d}
+	\Leftrightarrow\\
+	\nonumber \tan \varphi = \tan \varphi_{l} + \frac{2l}{d} = (1 + \frac{2l}{d \tan \varphi_{l}}) \tan \varphi_{l} = \frac{\tan \varphi_{l}}{1 + \frac{d}{2l} \tan \varphi_{l}}
+	\Leftrightarrow\\
+	\varphi = \arctan(\frac{\tan \varphi_{l}}{1+\frac{d}{2l}\tan \varphi_{l}})
+	\end{gather}
+	
 
+	\subsection{Task 3.2}
+	\paragraph{Differential-drive robot}
+	
+	\begin{gather}
+	\Delta \theta = \theta(t_{2}) - \theta(t_{1}) = \int_{t_{1}}^{t_{2}} \dot{\theta}(t) dt = \int_{t_{1}}^{t_{2}} \frac{1}{d} (v_{r} - v_{l}) dt = \frac{t_{2} - t_{1}}{d} (v_{r} - v_{l})
+	\end{gather}
+	\begin{gather}
+	\nonumber \Delta x = x(t_{2}) - x(t_{1}) = \int_{t_{1}}^{t_{2}} \dot{x}(t) dt = \int_{t_{1}}^{t_{2}} \frac{1}{2} \cos(\theta(t)) (v_{r} + v_{l}) dt =\\
+	\nonumber \frac{1}{2 \dot{\theta}(t_{2})} \sin(\theta(t_{2})) (v_{r} + v_{l}) - \frac{1}{2 \dot{\theta}(t_{1})} \sin(\theta(t_{1})) (v_{r} + v_{l}) =\\
+	\frac{d(v_{r} + v_{l})}{2(v_{r} - v_{l})}(\sin(\frac{t_{2}}{d}(v_{r} - v_{l})) - \sin(\frac{t_{1}}{d}(v_{r} - v_{l})))
+	\end{gather}
+	\begin{gather}
+	\nonumber \Delta y = y(t_{2}) - y(t_{1}) = \int_{t_{1}}^{t_{2}} \dot{y}(t) dt = \int_{t_{1}}^{t_{2}} \frac{1}{2} \sin(\theta(t)) (v_{r} + v_{l}) dt =\\
+	\nonumber -\frac{1}{2 \dot{\theta}(t_{2})} \cos(\theta(t_{2})) (v_{r} + v_{l}) + \frac{1}{2 \dot{\theta}(t_{1})} \cos(\theta(t_{1})) (v_{r} + v_{l}) =\\
+	-\frac{d(v_{r} + v_{l})}{2(v_{r} - v_{l})}(\cos(\frac{t_{2}}{d}(v_{r} - v_{l})) - \cos(\frac{t_{1}}{d}(v_{r} - v_{l})))
+	\end{gather}
+	
+	The equations can't be used for straight line motion. $\theta(t)$ and $\dot{\theta}(t)$ will be 0 for each $t$ because $v_{r}$ and $v_{l}$ are equal for straight line motion. Then there's a division by 0 when calculating $x(t)$ and $y(t)$.\\
+	
+	With $v_{r} = v_{l}$:
+	\begin{gather}
+	\dot{p} = 
+	\begin{bmatrix}
+	\dot{x}(t)\\
+	\dot{y}(t)\\
+	\dot{\theta}(t)
+	\end{bmatrix} = 
+	\begin{bmatrix}
+	1\\
+	0\\
+	0
+	\end{bmatrix} v(t)\\
+	v(t) = \frac{1}{2}(v_{r} + v_{l})
+	\end{gather}
+	
+	\paragraph{Car-like robot}
+	\begin{gather}
+	\Delta \theta = \theta(t_{2}) - \theta(t_{1}) = \int_{t_{1}}^{t_{2}} \dot{\theta}(t) dt = \int_{t_{1}}^{t_{2}} \frac{\tan \varphi}{l} v dt = \frac{\tan \varphi}{l} v (t_{2} - t_{1})
+	\end{gather}
+	\begin{gather}
+	\nonumber \Delta x = x(t_{2}) - x(t_{1}) = \int_{t_{1}}^{t_{2}} \dot{x}(t) dt = \int_{t_{1}}^{t_{2}} \cos(\theta(t)) v dt =\\
+	\nonumber \frac{v}{\dot{\theta}(t_{2})} \sin(\theta(t_{2})) - \frac{v}{\dot{\theta}(t_{1})} \sin(\theta(t_{1})) =\\
+	\frac{l}{\tan \varphi}(\sin(\frac{\tan(\varphi)vt_{2}}{l}) - \sin(\frac{\tan(\varphi)vt_{1}}{l}))
+	\end{gather}
+	\begin{gather}
+	\nonumber \Delta y = y(t_{2}) - y(t_{1}) = \int_{t_{1}}^{t_{2}} \dot{y}(t) dt = \int_{t_{1}}^{t_{2}} \sin(\theta(t)) v dt =\\
+	\nonumber -\frac{v}{\dot{\theta}(t_{2})} \cos(\theta(t_{2})) + \frac{v}{\dot{\theta}(t_{1})} \cos(\theta(t_{1})) =\\
+	-\frac{l}{\tan \varphi}(\cos(\frac{\tan(\varphi)vt_{2}}{l}) - \cos(\frac{\tan(\varphi)vt_{1}}{l}))
+	\end{gather}
+	
+	The equations can't be used for straight line motion. $\theta(t)$ and $\dot{\theta}(t)$ will be 0 for each $t$ because $\varphi$ and therefore also $\tan \varphi$ is 0 for straight line motion. Then there's a division by 0 when calculating $x(t)$ and $y(t)$.\\
+	
+	With $\varphi = 0$:
+	\begin{gather}
+	\dot{p} = 
+	\begin{bmatrix}
+	\dot{x}(t)\\
+	\dot{y}(t)\\
+	\dot{\theta}(t)
+	\end{bmatrix} = 
+	\begin{bmatrix}
+	1\\
+	0\\
+	0
+	\end{bmatrix} v(t)
+	\end{gather}
+	
+	\subsection{Task 3.3}
+	There are no kinematic differences between a robot with Ackerman steering and rear wheel driven tricycles or bicycles.\\
+	If the ICC for a rear wheel driven tricycle falls between the rear wheels the wheel which is located closer to the ICC must perform a backwards rotation to allow a cyclic movement of the robot around the ICC.
 \end{document}
