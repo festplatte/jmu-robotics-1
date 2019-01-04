@@ -1,0 +1,115 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage {graphicx}
+\usepackage{amsmath}
+
+\begin{document}
+	\title{Robotics 1 - Summary}
+	\maketitle
+	
+	\newpage
+	
+	\tableofcontents
+	
+	\newpage
+	
+	\section{Basics}
+	\subsection{Definitions}
+	\textbf{Degrees of freedom}: Defines how many axes of the robot can be manipulated\\
+	\textbf{Joints (Gelenke)}: The robot's joints can be \textbf{r}evolute (rotating) or \textbf{p}rismatic (expanding)\\
+	\textbf{Joint variable}: The value that describes the state of the joint. This is the current length for prisamtic joints and the rotation angle for revolute joints.\\
+	\textbf{Work envelope}: All points that can be reaced with the endeffector
+
+	\subsection{Mathematical Background}
+	\paragraph{Sinus, Cosinus, Tangenz}
+	TODO
+	\paragraph{Matrices and vectors}
+	$I$: Identiymatrix, 0 for every element exept the diagonal from top left to bottom right\\
+	Short formes: $S_{k} = \sin \theta_{k}$, $C_{k} = \cos \theta_{k}$
+	
+	\section{Manipulators}
+	\subsection{Direct kinematics}
+	Direct kinematics mean the determination of the tool tip's coordinates in the base reference frame when the values for the joint variables are given.
+	\subsubsection{Transformations}
+	Describe how a coordinate frame is located in respect to a base reference frame.
+	\paragraph{Fundamental rotation matrices} $R_{n}(\phi)$ describes the rotation around the n axe with the angle $\phi$.\\
+	\begin{equation}
+	R_{1}(\phi) = 
+	\begin{bmatrix}
+	1 && 0 && 0\\
+	0 && \cos \phi && -\sin \phi\\
+	0 && \sin \phi && \cos \phi
+	\end{bmatrix}
+	\end{equation}
+	\begin{equation}
+	R_{2}(\phi) = 
+	\begin{bmatrix}
+	\cos \phi && 0 && \sin \phi\\
+	0 && 1 && 0\\
+	-\sin \phi && 0 && \cos \phi
+	\end{bmatrix}
+	\end{equation}
+	\begin{equation}
+	R_{3}(\phi) = 
+	\begin{bmatrix}
+	\cos \phi && -\sin \phi && 0\\
+	\sin \phi && \cos \phi && 0\\
+	0 && 0 && 1
+	\end{bmatrix}
+	\end{equation}
+	
+	\paragraph{Composite rotations} Combine the fundamental rotation matrices by the following rules:
+	
+	\begin{enumerate}
+		\item Start with $R = I$, $F$ (fixed frame) and $M$ (mobile frame) are equivalent
+		\item If rotation of $M$ around axis of $F$, \textbf{premultiply} rotation matrix to $R$
+		\item If rotation of $M$ around axis of $M$, \textbf{postmultiply} rotation matrix to $R$
+	\end{enumerate}
+
+	\paragraph{Yaw-Pitch-Roll transformation} Rotate around $f^1$ with $\theta_{1}$, $f^2$ with $\theta_{2}$ and $f^3$ with $\theta_{3}$
+	\begin{equation}
+	YPR(\theta) = 
+	\begin{bmatrix}
+	C_{2} C_{3} && S_{1} S_{2} C_{3} - C_{1} S_{3} && C_{1} S_{2} C_{3} + S_{1} S_{3}\\
+	C_{2} S_{3}  && S_{1} S_{2} S_{3} + C_{1} C_{3} && C_{1} S_{2} S_{3} - S_{1} C_{3}\\
+	-S_{2} && S_{1} C_{2} && C_{1} C_{2}
+	\end{bmatrix}
+	\end{equation}
+	
+	\paragraph{Euler Angles transformation} Rotate around $m^3$ with $\theta_{1}$, $m^2$ with $\theta_{2}$ and $m^3$ with $\theta_{3}$ again
+	\begin{equation}
+	R_{3}(\theta_{1}) R_{2}(\theta_{2}) R_{3}(\theta_{3}) = 
+	\begin{bmatrix}
+	C_{1} C_{2} C_{3} - S_{1} S_{3} && -C_{1} C_{2} S_{3} - S_{1} C_{3} && C_{1} S_{2}\\
+	S_{1} C_{2} C_{3} + C_{1} S_{3}  && -S_{1} C_{2} S_{3} + C_{1} C_{3} && S_{1} S_{2}\\
+	-S_{2} C_{3} && S_{2} S_{3} && C_{2}
+	\end{bmatrix}
+	\end{equation}
+		
+	\paragraph{Homogenous transformation} Describe coordinates as homogenous coordinates to describe rotations and translations\\
+	vector $q$ as homogenous coordinates is $[q_{1} q_{2} q_{3} 1]^T$\\
+	Homogenous transformation matrix
+	\begin{equation}
+	T = 
+	\begin{bmatrix}
+	R && p\\
+	\eta^T && \sigma
+	\end{bmatrix}
+	\end{equation}
+	with\\
+	$R \in \mathbf{R}^{3 \times 3}$ is a rotation matrix\\
+	$p \in \mathbf{R}^{3 \times 1}$ is a translation vector\\
+	$\sigma \in \mathbf{R}$ is a scaling factor (usually 1)\\
+	$\eta^T \in \mathbf{R}^{1 \times 3}$ is a perspective vector, here zero vector
+	
+	% TODO continue at slide 21
+
+
+	\subsection{Inverse kinematics}
+	\subsection{Dynamics}
+	
+	\section{Mobile robots}
+	\subsection{Direct kinematics}
+	\subsection{Inverse kinematics}
+\end{document}
