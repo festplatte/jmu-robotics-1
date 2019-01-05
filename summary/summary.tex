@@ -19,18 +19,17 @@
 	\textbf{Degrees of freedom}: Defines how many axes of the robot can be manipulated\\
 	\textbf{Joints (Gelenke)}: The robot's joints can be \textbf{r}evolute (rotating) or \textbf{p}rismatic (expanding)\\
 	\textbf{Joint variable}: The value that describes the state of the joint. This is the current length for prisamtic joints and the rotation angle for revolute joints.\\
-	\textbf{Work envelope}: All points that can be reaced with the endeffector
+	\textbf{Work envelope}: All points that can be reaced with the endeffector\\
+	\textbf{Coordinate frames}: $[v]^M$ points out that the values of vector $v$ are in the coordinate frame $M$.
 
 	\subsection{Mathematical Background}
 	\paragraph{Sinus, Cosinus, Tangenz}
-	TODO
-	\paragraph{Matrices and vectors}
-	$I$: Identiymatrix, 0 for every element exept the diagonal from top left to bottom right\\
 	Short formes: $S_{k} = \sin \theta_{k}$, $C_{k} = \cos \theta_{k}$
 	
-	\section{Manipulators}
-	\subsection{Direct kinematics}
-	Direct kinematics mean the determination of the tool tip's coordinates in the base reference frame when the values for the joint variables are given.
+	\paragraph{Matrices and vectors}
+	$I$: Identiymatrix, 0 for every element exept the diagonal from top left to bottom right\\
+	Inverse matrix $M^{-1}$: $M^{-1} M = I$
+	
 	\subsubsection{Transformations}
 	Describe how a coordinate frame is located in respect to a base reference frame.
 	\paragraph{Fundamental rotation matrices} $R_{n}(\phi)$ describes the rotation around the n axe with the angle $\phi$.\\
@@ -59,14 +58,6 @@
 	\end{bmatrix}
 	\end{equation}
 	
-	\paragraph{Composite rotations} Combine the fundamental rotation matrices by the following rules:
-	
-	\begin{enumerate}
-		\item Start with $R = I$, $F$ (fixed frame) and $M$ (mobile frame) are equivalent
-		\item If rotation of $M$ around axis of $F$, \textbf{premultiply} rotation matrix to $R$
-		\item If rotation of $M$ around axis of $M$, \textbf{postmultiply} rotation matrix to $R$
-	\end{enumerate}
-
 	\paragraph{Yaw-Pitch-Roll transformation} Rotate around $f^1$ with $\theta_{1}$, $f^2$ with $\theta_{2}$ and $f^3$ with $\theta_{3}$
 	\begin{equation}
 	YPR(\theta) = 
@@ -86,7 +77,7 @@
 	-S_{2} C_{3} && S_{2} S_{3} && C_{2}
 	\end{bmatrix}
 	\end{equation}
-		
+	
 	\paragraph{Homogenous transformation} Describe coordinates as homogenous coordinates to describe rotations and translations\\
 	vector $q$ as homogenous coordinates is $[q_{1} q_{2} q_{3} 1]^T$\\
 	Homogenous transformation matrix
@@ -101,10 +92,52 @@
 	$R \in \mathbf{R}^{3 \times 3}$ is a rotation matrix\\
 	$p \in \mathbf{R}^{3 \times 1}$ is a translation vector\\
 	$\sigma \in \mathbf{R}$ is a scaling factor (usually 1)\\
-	$\eta^T \in \mathbf{R}^{1 \times 3}$ is a perspective vector, here zero vector
+	$\eta^T \in \mathbf{R}^{1 \times 3}$ is a perspective vector, here zero vector	\begin{equation}
+	Rot(\phi, k) = 
+	\begin{bmatrix}
+	&& && && 0\\
+	&& R_{k}(\phi) && && 0\\
+	&& && && 0\\
+	0 && 0 && 0 && 1
+	\end{bmatrix}, 
+	Tran(p) = 
+	\begin{bmatrix}
+	1 && 0 && 0 && p_{1}\\
+	0 && 1 && 0 && p_{2}\\
+	0 && 0 && 1 && p_{3}\\
+	0 && 0 && 0 && 1
+	\end{bmatrix}
+	\end{equation}
 	
-	% TODO continue at slide 21
-
+	Calculate arbitrary transformations by using the following rules:
+	\begin{enumerate}
+		\item Start with $T = I$, $F$ (fixed frame) and $M$ (mobile frame) are equivalent
+		\item Represent rotations and translations as separate fundamental homogenous transformation matrices
+		\item If $M$ is rotated about or translated along a unit vector of $F$, \textbf{premultiply} homogenous transformation matrix to $T$
+		\item If $M$ is rotated about or translated along a unit vector of $M$, \textbf{postmultiply} homogenous transformation matrix to $T$
+	\end{enumerate}
+	
+	\paragraph{Inverse homogenous transformation} If the transformation matrix $T$ maps coordinates from coordinate frame $A$ to $B$, the inverse $T^{-1}$ maps coodinates from $B$ to $A$.
+	\begin{equation}
+	T^{-1} = 
+	\begin{bmatrix}
+	&& R^T && && -R^T p\\
+	0 && 0 && 0 && 1
+	\end{bmatrix}
+	\end{equation}
+	with $\eta = 0$ and $\sigma = 1$
+	
+	\paragraph{Screw transformation} rotation of $\phi$ and translation of $\lambda$ around/about the same axis $k$ (unit vector of $F$) like the movement with a screw driver
+	\begin{equation}
+	Screw(\lambda,\phi,k) = Rot(\phi , k) Tran(\lambda i^k)
+	\end{equation}
+	with $i^k$ as $k$-th unit vector
+	
+	\section{Manipulators}
+	\subsection{Direct kinematics}
+	Direct kinematics mean the determination of the tool tip's coordinates in the base reference frame when the values for the joint variables are given.
+	
+	% TODO continue with slide 28
 
 	\subsection{Inverse kinematics}
 	\subsection{Dynamics}
