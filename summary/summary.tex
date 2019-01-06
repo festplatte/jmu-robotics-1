@@ -21,7 +21,7 @@
 	\textbf{Joint variable}: The value that describes the state of the joint. This is the current length for prisamtic joints and the rotation angle for revolute joints.\\
 	\textbf{Work envelope}: All points that can be reaced with the endeffector\\
 	\textbf{Coordinate frames}: $[v]^M$ points out that the values of vector $v$ are in the coordinate frame $M$.
-
+	
 	\subsection{Mathematical Background}
 	\paragraph{Sinus, Cosinus, Tangenz}
 	Short formes: $S_{k} = \sin \theta_{k}$, $C_{k} = \cos \theta_{k}$
@@ -36,25 +36,25 @@
 	\begin{equation}
 	R_{1}(\phi) = 
 	\begin{bmatrix}
-	1 && 0 && 0\\
-	0 && \cos \phi && -\sin \phi\\
-	0 && \sin \phi && \cos \phi
+	1 & 0 & 0\\
+	0 & \cos \phi & -\sin \phi\\
+	0 & \sin \phi & \cos \phi
 	\end{bmatrix}
 	\end{equation}
 	\begin{equation}
 	R_{2}(\phi) = 
 	\begin{bmatrix}
-	\cos \phi && 0 && \sin \phi\\
-	0 && 1 && 0\\
-	-\sin \phi && 0 && \cos \phi
+	\cos \phi & 0 & \sin \phi\\
+	0 & 1 & 0\\
+	-\sin \phi & 0 & \cos \phi
 	\end{bmatrix}
 	\end{equation}
 	\begin{equation}
 	R_{3}(\phi) = 
 	\begin{bmatrix}
-	\cos \phi && -\sin \phi && 0\\
-	\sin \phi && \cos \phi && 0\\
-	0 && 0 && 1
+	\cos \phi & -\sin \phi & 0\\
+	\sin \phi & \cos \phi & 0\\
+	0 & 0 & 1
 	\end{bmatrix}
 	\end{equation}
 	
@@ -62,9 +62,9 @@
 	\begin{equation}
 	YPR(\theta) = 
 	\begin{bmatrix}
-	C_{2} C_{3} && S_{1} S_{2} C_{3} - C_{1} S_{3} && C_{1} S_{2} C_{3} + S_{1} S_{3}\\
-	C_{2} S_{3}  && S_{1} S_{2} S_{3} + C_{1} C_{3} && C_{1} S_{2} S_{3} - S_{1} C_{3}\\
-	-S_{2} && S_{1} C_{2} && C_{1} C_{2}
+	C_{2} C_{3} & S_{1} S_{2} C_{3} - C_{1} S_{3} & C_{1} S_{2} C_{3} + S_{1} S_{3}\\
+	C_{2} S_{3}  & S_{1} S_{2} S_{3} + C_{1} C_{3} & C_{1} S_{2} S_{3} - S_{1} C_{3}\\
+	-S_{2} & S_{1} C_{2} & C_{1} C_{2}
 	\end{bmatrix}
 	\end{equation}
 	
@@ -72,9 +72,9 @@
 	\begin{equation}
 	R_{3}(\theta_{1}) R_{2}(\theta_{2}) R_{3}(\theta_{3}) = 
 	\begin{bmatrix}
-	C_{1} C_{2} C_{3} - S_{1} S_{3} && -C_{1} C_{2} S_{3} - S_{1} C_{3} && C_{1} S_{2}\\
-	S_{1} C_{2} C_{3} + C_{1} S_{3}  && -S_{1} C_{2} S_{3} + C_{1} C_{3} && S_{1} S_{2}\\
-	-S_{2} C_{3} && S_{2} S_{3} && C_{2}
+	C_{1} C_{2} C_{3} - S_{1} S_{3} & -C_{1} C_{2} S_{3} - S_{1} C_{3} & C_{1} S_{2}\\
+	S_{1} C_{2} C_{3} + C_{1} S_{3}  & -S_{1} C_{2} S_{3} + C_{1} C_{3} & S_{1} S_{2}\\
+	-S_{2} C_{3} & S_{2} S_{3} & C_{2}
 	\end{bmatrix}
 	\end{equation}
 	
@@ -84,8 +84,8 @@
 	\begin{equation}
 	T = 
 	\begin{bmatrix}
-	R && p\\
-	\eta^T && \sigma
+	R & p\\
+	\eta^T & \sigma
 	\end{bmatrix}
 	\end{equation}
 	with\\
@@ -95,17 +95,17 @@
 	$\eta^T \in \mathbf{R}^{1 \times 3}$ is a perspective vector, here zero vector	\begin{equation}
 	Rot(\phi, k) = 
 	\begin{bmatrix}
-	&& && && 0\\
-	&& R_{k}(\phi) && && 0\\
-	&& && && 0\\
-	0 && 0 && 0 && 1
+	& & & 0\\
+	& R_{k}(\phi) & & 0\\
+	& & & 0\\
+	0 & 0 & 0 & 1
 	\end{bmatrix}, 
 	Tran(p) = 
 	\begin{bmatrix}
-	1 && 0 && 0 && p_{1}\\
-	0 && 1 && 0 && p_{2}\\
-	0 && 0 && 1 && p_{3}\\
-	0 && 0 && 0 && 1
+	1 & 0 & 0 & p_{1}\\
+	0 & 1 & 0 & p_{2}\\
+	0 & 0 & 1 & p_{3}\\
+	0 & 0 & 0 & 1
 	\end{bmatrix}
 	\end{equation}
 	
@@ -116,13 +116,15 @@
 		\item If $M$ is rotated about or translated along a unit vector of $F$, \textbf{premultiply} homogenous transformation matrix to $T$
 		\item If $M$ is rotated about or translated along a unit vector of $M$, \textbf{postmultiply} homogenous transformation matrix to $T$
 	\end{enumerate}
+
+	TODO: how to transform coodinates from one frame to another?
 	
 	\paragraph{Inverse homogenous transformation} If the transformation matrix $T$ maps coordinates from coordinate frame $A$ to $B$, the inverse $T^{-1}$ maps coodinates from $B$ to $A$.
 	\begin{equation}
 	T^{-1} = 
 	\begin{bmatrix}
-	&& R^T && && -R^T p\\
-	0 && 0 && 0 && 1
+	& R^T & & -R^T p\\
+	0 & 0 & 0 & 1
 	\end{bmatrix}
 	\end{equation}
 	with $\eta = 0$ and $\sigma = 1$
@@ -135,10 +137,96 @@
 	
 	\section{Manipulators}
 	\subsection{Direct kinematics}
-	Direct kinematics mean the determination of the tool tip's coordinates in the base reference frame when the values for the joint variables are given.
+	Direct kinematics is the determination of the tool tip's coordinates and orientation in the base coordinate frame when the values for the joint variables are given.
+	\subsubsection{Right-Hand Rules}
+	The assignment of the axis of a coodinate frame follows the right-hand rule (see figure \ref{fig:right-hand-frame}).\\
+	\begin{figure}[h]
+		\includegraphics[width=0.5\textwidth]{figures/right-hand-frame.JPG}
+		\caption{Right-handed coordinate frame}
+		\label{fig:right-hand-frame}
+	\end{figure}
+	To determine the positive direction of a rotation angle use the right-hand rule by pointing the thumb in the positive direction of the rotation axis. The remaining fingers indicate the positive direction of rotation. (see figure \ref{fig:right-hand-rule})
+	\begin{figure}[h]
+		\includegraphics[width=0.5\textwidth]{figures/right-hand-rule.JPG}
+		\caption{Right-hand rule}
+		\label{fig:right-hand-rule}
+	\end{figure}
 	
-	% TODO continue with slide 28
-
+	\subsubsection{Kinematic parameters}
+	Specify the kinematic configuration of a robot. There are $4n$ parameters for a $n$-axis robot, 4 for each link/joint, one of them is variable and is called \textbf{joint variable}.
+	
+	\begin{tabular}{|l|c|c|c|}
+		\hline
+		\textbf{Arm parameter} & \textbf{Symbol} & \textbf{Revolute joint} & \textbf{Prismatic joint} \\ \hline
+		Joint angle            &    $\theta$     &        variable         &          fixed           \\ \hline
+		Joint distance         &       $d$       &          fixed          &         variable         \\ \hline
+		Link length            &       $a$       &          fixed          &          fixed           \\ \hline
+		Link twist angle       &    $\alpha$     &          fixed          &          fixed           \\ \hline
+	\end{tabular} 
+	
+	\subsubsection{Denavit-Hartenberg Algorithm}
+	The Denavit-Hartenberg Algorithm is used to assign coordinate frames to each link of the robot and to determine the kinematic parameters of the robot.\\
+	Numbering of links: $0$ (fixed base) to $n$ at the tool $\Rightarrow$ $n+1$ links for $n$-axis robot\\
+	Numbering of joints: joint $k$ interconnects link $k-1$ with link $k$ with $1 \leq k \leq n$
+	\paragraph{Part 1: Assignment of coordinate frames}
+	\begin{enumerate}
+		\item Number the joints from $1$ to $n$
+		\item Assign a right-handed orthonormal coordinate frame $L_0$ to robot base, making sure that $z^0$ aligns with the axis of joint $1$. Set $k = 1$.
+		\item Align $z^k$ with the axis of joint $k + 1$.
+		\item Locate the orign of $L_k$ at the intersection of the $z^k$ and $z^{k-1}$ axes.\\
+		If they are not parallel and do not intersect, use the intersection of $z^k$ with a common normal between $z^k$ and $z^{k-1}$.\\
+		If they are parallel, use the intersection of $z^k$ with either a normal between $z^k$ and $z^{k+1}$ or the normal between $z^k$ and $z^{k-1}$ intersecting the origin of $L_{k-1}$.
+		\item Select $x^k$ to be orthogonal to both $z^k$ and $z^{k-1}$, making sure that $x^k$ intersects $z^{k-1}$. $x^k$ should point away from $z^{k-1}$.
+		\item Select $y^k$ to form a right-handed orthonormal coordinate frame $L_k$.
+		\item Set $k \leftarrow k + 1$. If $k < n$, go to step 3, else continue.
+		\item Set the origin of $L_n$ at the tool tip. Align $z^n$ with the approach vector, $y^n$ with the sliding vector and $x^n$ with the normal vector of the tool.\\
+		Set $k = 1$ and continue with part 2.
+	\end{enumerate}
+	\paragraph{Part 2: Determination of kinematic parameters}
+	\begin{enumerate}
+		\item Locate point $b_k$ at the intersection of the $x^k$ and $z^{k-1}$ axes.\\
+		Only in case $k = n$: If they do not intersect, use the intersection of $x^k$ with a common normal between $x^k$ and $z^{k-1}$
+		\item Compute $\theta_{k}$ as the angle of rotation from $x^{k-1}$ to $x^k$ measured about $z^{k-1}$.
+		\item Compute $d_k$ as the distance from the origin of frame $L_{k-1}$ to point $b_k$ measured along $z^{k-1}$.
+		\item Compute $a_k$ as the distance from point $b_k$ to the origin of frame $L_k$ measured along $x^k$.
+		\item Compute $\alpha_k$ as the angle of rotation from $z^{k-1}$ to $z^k$ measured about $x^k$.
+		\item Set $k \leftarrow k + 1$. If $k \leq n$, go to step 1, else stop.
+	\end{enumerate}
+	
+	\subsubsection{Arm equation}
+	The arm equation defines a transformation matrix $T^{tool}_{base}(q)$ that transforms coordinates of the tool coordinate frame $L_n$ to the base coordinate frame $L_0$ and depends on the vector of joint variables $q$ (see equation \ref{eq:transform-tool-base}). It is composed out of several transformations between the link coodinate frames (see equation \ref{eq:transform-lcf}).
+	\begin{equation}
+	T^{k}_{k-1} = 
+	\begin{bmatrix}
+	C \theta_k & -C \alpha_k S \theta_k & S \alpha_k S \theta_k & a_k C \theta_k\\
+	S \theta_k & C \alpha_k C \theta_k & -S \alpha_k C \theta_k & a_k S \theta_k\\
+	0 & S \alpha_k & C \alpha_k & d_k\\
+	0 & 0 & 0 & 1
+	\end{bmatrix}
+	\label{eq:transform-lcf}
+	\end{equation}
+	\begin{equation}
+	(T^{k}_{k-1})^{-1} = T^{k-1}_{k} = 
+	\begin{bmatrix}
+	C \theta_k & S \theta_k & 0 & -a_k\\
+	-C \alpha_k S \theta_k & C \alpha_k C \theta_k & S \alpha_k & -d_k S \alpha_k\\
+	S \alpha_k S \theta_k & -S \alpha_k C \theta_k & C \alpha_k & -d_k C \alpha_k\\
+	0 & 0 & 0 & 1
+	\end{bmatrix}
+	\end{equation}
+	\begin{equation}
+	T^{tool}_{base}(q) = T^1_0(q_1) T^2_1(q_2) ... T^n_{n-1}(q_n) = 
+	\begin{bmatrix}
+	& R(q) & & p(q)\\
+	0 & 0 & 0 & 1
+	\end{bmatrix}
+	\label{eq:transform-tool-base}
+	\end{equation}
+	$R(q) \in \mathbf{R}^{3 \times 3}$ the orientation of the tool as rotation matrix.\\
+	The three columns of $R(q)$ are the three unit vectors of the tool frame in relation to the base frame.\\
+	\\
+	$p(q) \in \mathbf{R}^3$ the translation vector and therefore the position of the tool tip in relation to the base frame.
+	
 	\subsection{Inverse kinematics}
 	\subsection{Dynamics}
 	
