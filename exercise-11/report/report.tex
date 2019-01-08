@@ -1,13 +1,13 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
-% \usepackage[ngerman]{babel}
+\usepackage[english]{babel}
 \usepackage {graphicx}
 \usepackage{amsmath}
 
 \begin{document}
-	\author{Michael Gabler}
-	\title{Robotic 1 - Exercise 11}
-	\date{27.12.2018}
+	\author{Michael Gabler (2381427), Matthias Clad (2349277)}
+	\title{Robotics 1 - Exercise 11}
+	\date{09.01.2018}
 	\maketitle
 	
 	\newpage
@@ -16,8 +16,7 @@
 	
 	\newpage
 	
-	\section{Tasks}
-	\subsection{Task 3.1}
+	\section{Task 3.1}
 	\paragraph{Proof for $\varphi = \arctan(\frac{\tan \varphi_{r}}{1-\frac{d}{2l}\tan \varphi_{r}})$}
 	
 	\begin{gather}
@@ -46,7 +45,7 @@
 	\end{gather}
 	
 
-	\subsection{Task 3.2}
+	\section{Task 3.2}
 	\paragraph{Differential-drive robot}
 	
 	\begin{gather}
@@ -113,13 +112,86 @@
 	\end{bmatrix} v(t)
 	\end{gather}
 	
-	\subsection{Task 3.3}
-	There are no kinematic differences between a robot with Ackerman steering and rear wheel driven tricycles or bicycles.\\
-	If the ICC for a rear wheel driven tricycle falls between the rear wheels the wheel which is located closer to the ICC must perform a backwards rotation to allow a cyclic movement of the robot around the ICC.
+	\section{Task 3.3}
+	If the ICC for a rear wheel driven tricycle falls between the rear wheels the wheel which is located closer to the ICC must perform a backwards rotation to allow a cyclic movement of the robot around the ICC. This is only possible it the wheels are able to rotate in opposite directions. The same applies to a robot with Achermann steering.\\
+	Since a bicycle has only one backwheel this only applies if the ICC lies directly on the center of the backwheel. In this case the bicycle would rotate around the centerpoint of the back wheel while the back wheel has no forward or backward rotation. This is not possible for a back wheel driven bicycle.
 	
-	\subsection{Task 3.4}
+	\section{Task 3.4}
 	\paragraph{Calculation of $v_{l}$ and $v_{r}$}
+	\begin{gather}
+	\theta(t_2) - \theta(t_1) = \frac{t_2 - t_1}{d}(v_r - v_l) \Rightarrow v_r = \frac{d}{t_2-t_1} (\theta(t_2) - \theta(t_1)) + v_l\\
+	x(t_2) - x(t_1) = \frac{d(v_{r} + v_{l})}{2(v_{r} - v_{l})}(\sin(\theta(t_2)) - \sin(\theta(t_1)))
+	\end{gather}\\
+	Insert $v_r$:
+	\begin{gather}
+	v_l = \frac{d}{t_2 - t_1}(\theta(t_2) - \theta(t_1))(\frac{1}{d}\frac{x(t_2) - x(t_1)}{\sin(\theta(t_2)) - \sin(\theta(t_1))} - \frac{1}{2})
+	\end{gather}\\
+	Insert $v_l$ into equation for $v_r$:
+	\begin{gather}
+	v_r = \frac{d}{t_2 - t_1}(\theta(t_2) - \theta(t_1))(\frac{1}{d}\frac{x(t_2) - x(t_1)}{\sin(\theta(t_2)) - \sin(\theta(t_1))} + \frac{1}{2})
+	\end{gather}\\
+	The difference between $v_r$ and $v_l$ is $\frac{d}{t_2 - t_1}(\theta(t_2) - \theta(t_1))$
 	
 	\paragraph{Calculation of the velocity $v$ and the steering angle $\varphi$}
+	\begin{gather}
+	\theta(t_2) - \theta(t_1) = \frac{\tan \varphi}{l} v (t_2 - t_1) \Rightarrow \tan \varphi = \frac{l (\theta(t_2) - \theta(t_1))}{v (t_2 - t_1)}\\
+	x(t_2) - x(t_1) = \frac{l}{\tan \varphi} (\sin(\theta(t_2)) - sin(\theta(t_1)))
+	\end{gather}\\
+	Insert $\tan \varphi$:
+	\begin{gather}
+	v = \frac{(x(t_2) - x(t_1))(\theta(t_2) - \theta(t_1))}{(t_2 - t_1)(\sin(\theta(t_2)) - \sin(\theta(t_1)))}
+	\end{gather}\\
+	Insert $v$ into equation for $\tan \varphi$:
+	\begin{gather}
+	\varphi = \arctan2(x(t_2) - x(t_1), l (\sin(\theta(t_2)) - \sin(\theta(t_1))))
+	\end{gather}
 	
+	\section{Task 3.5}
+	\paragraph{Ackermann robot - Scene 1} with the following maneuvers
+	
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline 
+		$i$ & $t_i$ & $x(t_i)$ & $y(t_i)$ & $\theta(t_i)$ \\ 
+		\hline 
+		1 & 0 & 5 & 5 & $\frac{\pi}{2}$ \\ 
+		\hline 
+		2 & 12 & 17 & 5 & $-\frac{\pi}{2}$ \\ 
+		\hline 
+	\end{tabular} 
+	\\
+		
+	\begin{gather}
+	v = \frac{(17-5)(-\frac{\pi}{2}-\frac{\pi}{2})}{(12-0)(\sin(-\frac{\pi}{2}) - \sin(\frac{\pi}{2})))} = \frac{\pi}{2} = 1,5708\\
+	\varphi = \arctan2(17 - 5, 2 (\sin(-\frac{\pi}{2}) - \sin(\frac{\pi}{2}))) = -18.43^\circ
+	\end{gather}
+	\includegraphics[width=0.8\textwidth]{figures/ackermann-scene-1.JPG}
+	
+	\paragraph{Ackermann robot - Scene 2} with the following maneuvers
+	
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline 
+		$i$ & $t_i$ & $x(t_i)$ & $y(t_i)$ & $\theta(t_i)$ \\ 
+		\hline 
+		1 & 0 & 5 & 5 & $\frac{\pi}{2}$ \\ 
+		\hline 
+		2 & 6 & 11 & 11 & 0 \\ 
+		\hline 
+		3 & 12 & 17 & 17 & $\frac{\pi}{2}$ \\ 
+		\hline 
+		4 & 14 & 17 & 5 & $\frac{\pi}{2}$ \\ 
+		\hline 
+	\end{tabular} 
+	\\
+
+	\begin{gather}
+	v_1 = \frac{(11-5)(0-\frac{\pi}{2})}{(6-0)(\sin(0) - \sin(\frac{\pi}{2})))} = \frac{\pi}{2} = 1,5708\\
+	\varphi_1 = \arctan2(11 - 5, 2 (\sin(0) - \sin(\frac{\pi}{2}))) = -18.43^\circ\\
+	v_2 = \frac{(17-11)(\frac{\pi}{2} - 0)}{(12-6)(\sin(\frac{\pi}{2}) - \sin(0)))} = \frac{\pi}{2} = 1,5708\\
+	\varphi_2 = \arctan2(17 - 11, 2 (\sin(\frac{\pi}{2}) - \sin(0))) = 18.43^\circ\\
+	v_3 = \frac{y(t_4) - y(t_3)}{t_4 - t_3} = -7
+	\end{gather}\\
+	$\varphi_3 = 0$ because the robot is already orientated correctly.\\
+	\\
+	\includegraphics[width=0.8\textwidth]{figures/ackermann-scene-2.JPG}
+
 \end{document}
