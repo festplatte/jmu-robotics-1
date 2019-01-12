@@ -264,7 +264,18 @@
 	\textbf{Work envelope} describes all points $p$ that are reachable with the tool tip. This results from the joint-space work envelope.
 	
 	\subsubsection{Trajectory planning}
-	% TODO continue with chapter 4, slide 22
+	The trajectory describes a path on which the tool tip moves to get from one point to another and at what time the tool tip has to be located at which point in between.\\
+	\textbf{Speed distribution function} $s(t) = \lambda$ maps every $t \in [0;T]$ to the values $\lambda \in [0;1]$. $t$ describes the current time on the path where $T$ is the time at which the target point is reached. $s(0) = 0$ and $s(T) = 1$.\\
+	\textbf{Speed profile} $\dot{s}(t)$ is the derivative of the speed distribution function and puts out the velocity for each $t$.\\
+	\textbf{Acceleration} The current acceleration is given by the derivative of the speed profile $\ddot{s}(t)$.\\
+	\textbf{Straight line motion} connects to points on the shortest possible way. To calculate the current tool-configuration vector use: $w(t) = (1-s(t))w^0 + s(t)w^1$ with $w^0$ as initial and $w^1$ as target position.\\
+	\textbf{Joint velocity} $\dot{q}_k$ can be calculated by deriving the equations for the inverse kinematic. This value is directly proportional to the output speed of the $k$-th joint motor.\\
+	\textbf{Problems of trajectory planning}
+	\begin{itemize}
+		\item Singularities: points in work envelope where a total different orientation of the joints is required to reach the next point (would require infinite acceleration)
+		\item Path of knot points: for continuous motion infinite accelerations would be applied (instead stop at every knot point and do separate trajectory plannings) $\rightarrow$ cubic polynomial interpolation
+	\end{itemize}
+	% TODO continue at chapter 4, slide 41
 	
 	\subsection{Dynamics}
 	
