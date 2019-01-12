@@ -24,7 +24,17 @@
 	
 	\subsection{Mathematical Background}
 	\paragraph{Sinus, Cosinus, Tangenz}
-	Short formes: $S_{k} = \sin \theta_{k}$, $C_{k} = \cos \theta_{k}$
+	Short formes: $S_{k} = \sin \theta_{k}$, $C_{k} = \cos \theta_{k}$\\
+	$\arctan(\frac{y}{x}) \in ]-\frac{\pi}{2};\frac{\pi}{2}[$: to find all solutions use the $\arctan2$ instead:
+	\begin{equation}
+	\arctan2(y,x) = 
+	\begin{Vmatrix} % TODO change matrixtype
+	\arctan(\frac{y}{x}), & x > 0\\
+	sgn(y)\frac{\pi}{2}, & x = 0\\
+	\arctan(\frac{y}{x}) + sgn(y)\pi, & x < 0, y \neq 0\\
+	\pi, & x < 0, y = 0
+	\end{Vmatrix}
+	\end{equation}
 	
 	\paragraph{Matrices and vectors}
 	$I$: Identiymatrix, 0 for every element exept the diagonal from top left to bottom right\\
@@ -228,6 +238,34 @@
 	$p(q) \in \mathbf{R}^3$ the translation vector and therefore the position of the tool tip in relation to the base frame.
 	
 	\subsection{Inverse kinematics}
+	Inverse kinematics describes the task to determine the robot's joint variables when the tool tip's coordinates and orientation (called the tool configuration) is given. There are often multiple solutions because the position can be reached by different alignment of the joints.
+	
+	\subsubsection{Tool-configuration space}
+	To describe the tool tip's coordinates and orientation one can use a $\mathbf{R}^6$-vector which is called the tool-configuration vector $w$.\\
+	\begin{equation}
+	w = 
+	\begin{bmatrix}
+	w_1 \\ w_2 \\ w_3 \\ w_4 \\ w_5 \\ w_6
+	\end{bmatrix} = 
+	\begin{bmatrix}
+	p \\ e^{\frac{q_n}{\pi}}r^3
+	\end{bmatrix}
+	\end{equation}
+	with $p \in \mathbf{R}^3$ the translation vector of the arm equation's vector $T^{tool}_{base}$\\
+	$q \in \mathbf{R}^n$ the vector of joint variables for a robot with $n$-joints\\
+	$r^3 \in \mathbf{R}^3$ the third column vector of the rotation matrix $R$ from $T^{tool}_{base}$
+	
+	\subsubsection{Solving the inverse kinematic}
+	Construct a vector $w$ by calculating the matrix $T^{tool}_{base}$ and taking the equations from there. $w_1, ..., w_6$ is given, so it's possible to solve the equation system for all values of the joint variables vector $q$.\\
+	\textbf{Hint}: $q_n = \pi \ln \sqrt{w_4^2+w_5^2+w_6^2}$
+
+	\subsubsection{Work space}
+	\textbf{Joint-space work envelope} describes all values that are possible for the joint variables. They have to be between $q^{min}$ and $q^{max}$ which denote the minimal and maximal limits of the joints.\\
+	\textbf{Work envelope} describes all points $p$ that are reachable with the tool tip. This results from the joint-space work envelope.
+	
+	\subsubsection{Trajectory planning}
+	% TODO continue with chapter 4, slide 22
+	
 	\subsection{Dynamics}
 	
 	\section{Mobile robots}
