@@ -273,9 +273,17 @@
 	\textbf{Problems of trajectory planning}
 	\begin{itemize}
 		\item Singularities: points in work envelope where a total different orientation of the joints is required to reach the next point (would require infinite acceleration)
-		\item Path of knot points: for continuous motion infinite accelerations would be applied (instead stop at every knot point and do separate trajectory plannings) $\rightarrow$ cubic polynomial interpolation
+		\item Path of knot points: for continuous motion infinite accelerations would be applied (instead stop at every knot point and do separate trajectory plannings) $\rightarrow$ at least two continuous derivatives of $w(t)$ required
 	\end{itemize}
-	% TODO continue at chapter 4, slide 41
+
+	\paragraph{Cubic Polynomial Interpolation} Define a trajectory with this function: $w(t) = at^3 + bt^2 + ct + d$ for $0 \leq t \leq T$ which can be derivated two times. Solve with the following constraints:\\
+	$w(0) = w^0$, $w(T) = w^1$, $v(0) = \dot{w}(0) = v^0$, $v(T) = \dot{w}(T) = v^1$\\
+	For trajectory through more than two points, use higher-degree interpolating polynomial, choose velocities for the points and construct the new constraint equations
+	
+	\paragraph{Linear Interpolation with Parabolic Blends} Use straight motion trajectory planning for each segment and use blends to prevent infinitive accelerations between the segments. The robot will not follow the exact path for $2 \Delta T$ near the connection points between the segments. For $t \in [T_1 - \Delta T, T_1 + \Delta T]$ use the following function:\\
+	$w(t) = \frac{1}{2} a (t - T_1 + \Delta T)^2 + b (t - T_1 + \Delta T) + c$
+	% TODO continue with chapter 4, slide 45 (rest of equation)
+	
 	
 	\subsection{Dynamics}
 	
