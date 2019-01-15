@@ -280,6 +280,17 @@
 	\subsection{Dynamics}
 	
 	\section{Mobile robots}
+	\textbf{Castor wheel} is a wheel that can be aligned in every direction but is not steerable. It is used for stabilization.
 	\subsection{Direct kinematics}
 	\subsection{Inverse kinematics}
+	\subsection{Classification}
+	$\sigma_S$ is the number of independent controllable steering angles\\
+	$\sigma_M$ is the number of independent controllable motors to power the wheels\\
+	$\dot{p} = R^T(\theta) \Sigma \eta(t)$\\
+	\\
+	\textbf{Follow the carrot} Method of reaching a goal that keeps the robot moving\\
+	current position: $(x, y, \theta)^T$, goal position: $(x_L, y_L)^T$\\
+	$\delta x = x_L - x$\\
+	$\delta y = y_L - y$\\
+	$\theta_L = \arctan2(\delta y, \delta x)$
 \end{document}
