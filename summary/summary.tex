@@ -147,10 +147,10 @@
 	\end{bmatrix}
 	\end{equation}
 	with\\
-	$R \in \mathbf{R}^{3 \times 3}$ is a rotation matrix\\
-	$p \in \mathbf{R}^{3 \times 1}$ is a translation vector\\
-	$\sigma \in \mathbf{R}$ is a scaling factor (usually 1)\\
-	$\eta^T \in \mathbf{R}^{1 \times 3}$ is a perspective vector, here zero vector	\begin{equation}
+	$R \in \R^{3 \times 3}$ is a rotation matrix\\
+	$p \in \R^{3 \times 1}$ is a translation vector\\
+	$\sigma \in \R$ is a scaling factor (usually 1)\\
+	$\eta^T \in \R^{1 \times 3}$ is a perspective vector, here zero vector	\begin{equation}
 	Rot(\phi, k) = 
 	\begin{bmatrix}
 	& & & 0\\
@@ -174,7 +174,7 @@
 		\item If $M$ is rotated about or translated along a unit vector of $F$, \textbf{premultiply} homogenous transformation matrix to $T$
 		\item If $M$ is rotated about or translated along a unit vector of $M$, \textbf{postmultiply} homogenous transformation matrix to $T$
 	\end{enumerate}
-
+	
 	% TODO: how to transform coodinates from one frame to another?
 	
 	\paragraph{Inverse homogenous transformation} If the transformation matrix $T$ maps coordinates from coordinate frame $A$ to $B$, the inverse $T^{-1}$ maps coodinates from $B$ to $A$.
@@ -280,16 +280,16 @@
 	\end{bmatrix}
 	\label{eq:transform-tool-base}
 	\end{equation}
-	$R(q) \in \mathbf{R}^{3 \times 3}$ the orientation of the tool as rotation matrix.\\
+	$R(q) \in \R^{3 \times 3}$ the orientation of the tool as rotation matrix.\\
 	The three columns of $R(q)$ are the three unit vectors of the tool frame in relation to the base frame.\\
 	\\
-	$p(q) \in \mathbf{R}^3$ the translation vector and therefore the position of the tool tip in relation to the base frame.
+	$p(q) \in \R^3$ the translation vector and therefore the position of the tool tip in relation to the base frame.
 	
 	\subsection{Inverse kinematics}
 	Inverse kinematics describes the task to determine the robot's joint variables when the tool tip's coordinates and orientation (called the tool configuration) is given. There are often multiple solutions because the position can be reached by different alignment of the joints.
 	
 	\subsubsection{Tool-configuration space}
-	To describe the tool tip's coordinates and orientation one can use a $\mathbf{R}^6$-vector which is called the tool-configuration vector $w$.\\
+	To describe the tool tip's coordinates and orientation one can use a $\R^6$-vector which is called the tool-configuration vector $w$.\\
 	\begin{equation}
 	w = 
 	\begin{bmatrix}
@@ -299,14 +299,14 @@
 	p \\ e^{\frac{q_n}{\pi}}r^3
 	\end{bmatrix}
 	\end{equation}
-	with $p \in \mathbf{R}^3$ the translation vector of the arm equation's vector $T^{tool}_{base}$\\
-	$q \in \mathbf{R}^n$ the vector of joint variables for a robot with $n$-joints\\
-	$r^3 \in \mathbf{R}^3$ the third column vector of the rotation matrix $R$ from $T^{tool}_{base}$
+	with $p \in \R^3$ the translation vector of the arm equation's vector $T^{tool}_{base}$\\
+	$q \in \R^n$ the vector of joint variables for a robot with $n$-joints\\
+	$r^3 \in \R^3$ the third column vector of the rotation matrix $R$ from $T^{tool}_{base}$
 	
 	\subsubsection{Solving the inverse kinematic}
 	Construct a vector $w$ by calculating the matrix $T^{tool}_{base}$ and taking the equations from there. $w_1, ..., w_6$ is given, so it's possible to solve the equation system for all values of the joint variables vector $q$.\\
 	\textbf{Hint}: $q_n = \pi \ln \sqrt{w_4^2+w_5^2+w_6^2}$
-
+	
 	\subsubsection{Work space}
 	\textbf{Joint-space work envelope} describes all values that are possible for the joint variables. They have to be between $q^{min}$ and $q^{max}$ which denote the minimal and maximal limits of the joints.\\
 	\textbf{Work envelope} describes all points $p$ that are reachable with the tool tip. This results from the joint-space work envelope.
@@ -323,7 +323,7 @@
 		\item Singularities: points in work envelope where a total different orientation of the joints is required to reach the next point (would require infinite acceleration)
 		\item Path of knot points: for continuous motion infinite accelerations would be applied (instead stop at every knot point and do separate trajectory plannings) $\rightarrow$ at least two continuous derivatives of $w(t)$ required
 	\end{itemize}
-
+	
 	\paragraph{Cubic Polynomial Interpolation} Define a trajectory with this function: $w(t) = at^3 + bt^2 + ct + d$ for $0 \leq t \leq T$ which can be derivated two times. Solve with the following constraints:\\
 	$w(0) = w^0$, $w(T) = w^1$, $v(0) = \dot{w}(0) = v^0$, $v(T) = \dot{w}(T) = v^1$\\
 	For trajectory through more than two points, use higher-degree interpolating polynomial, choose velocities for the points and construct the new constraint equations
@@ -381,7 +381,7 @@
 		\item Set $i \leftarrow i + 1$. If $i \leq n$ go to step 9.
 	\end{enumerate}
 	$\Rightarrow$ needs a lot of computation $\rightarrow$ the Newton-Euler equation (based on Newtonian mechanics) is used because it needs fewer mathematical operations
-
+	
 	% TODO continue with chapter 07
 	
 	\section{Mobile robots}
