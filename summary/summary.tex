@@ -67,12 +67,30 @@
 	\end{equation}
 	
 	\paragraph{Matrices and vectors}
-	$I$: Identiymatrix, 0 for every element exept the diagonal from top left to bottom right\\
-	Inverse matrix $M^{-1}$: $M^{-1} M = I$
+	$I$: \textbf{Identitymatrix}, 0 for every element exept the diagonal from top left to bottom right\\
+	\textbf{Inverse matrix} $M^{-1}$: $M^{-1} M = I$\\
+	\textbf{Rank of the matrix}: is the number of row vectors that are not 0. Before that use the Gaussian elimination (change row vectors, add or subtract row vectors multiplied with a scalar to/from each other):
+	\begin{equation}
+	A = 
+	\begin{bmatrix}
+	1 & 2 & 3\\
+	0 & 6 & 4\\
+	0 & 3 & 2
+	\end{bmatrix}
+	\rightarrow
+	\begin{bmatrix}
+	1 & 2 & 3\\
+	0 & 6 & 4\\
+	0 & 0 & 0
+	\end{bmatrix}
+	\Rightarrow
+	rank(A) = 2
+	\end{equation}
+	
 	
 	\subsubsection{Transformations}
 	Describe how a coordinate frame is located in respect to a base reference frame.
-	\paragraph{Fundamental rotation matrices} $R_{n}(\phi)$ describes the rotation around the n axe with the angle $\phi$.\\
+	\paragraph{Fundamental rotation matrices} $R_{n}(\phi)$ describes the rotation around the n axes with the angle $\phi$.\\
 	\begin{equation}
 	R_{1}(\phi) = 
 	\begin{bmatrix}
@@ -321,10 +339,50 @@
 	\end{equation}\\
 	with $a = \frac{T_1 \Delta w^2 - T_2 \Delta w^1}{2T_1 T_2 \Delta T}$
 	
-	% TODO continue with chapter 5
-	
 	\subsection{Dynamics}
+	A manipulators dynamics model describes how the joint trajectory $q(t)$ and the applied torques/forces to the joint actuators/motors $\tau(t)$ belong together. The direct dynamics problem is the calculation of the joint trajectory for given torques. The inverse dynamics problem shows the applied torques by given trajectory.
 	
+	\subsubsection{Jacobian Matrix}
+	The Jacobian matrix $V(q)$ or $J(q)$ is a $6 \times n$ matrix for a $n$ joint robot which is used to formalize the differential relationship between $q$ and $x$: $$\dot{x} = \dot{w}(q) \dot{q} = V(q) \dot{q} = J(q) \dot{q}$$ with $V_{kj}(q) = J_{kj}(q) = \frac{dw_k(q)}{dq_j}, 1 \leq k \leq 6, 1 \leq j \leq n$\\
+	It maps the joint-space velocities $\dot{q}$ to the tool-configuration velocities $\dot{x}$.
+	
+	\subsubsection{Singularities}
+	A singularity occurs when certain joint variables $\tilde{q}$ lower the rank of the Jacobian matrix $V(\tilde{q})$. There are \textbf{boundary singularities} which occur when the tool tip is located at the edge of the work envelope and \textbf{interior singularities} when the tool tip is inside the work envelope.\\
+	To calculate the joint velocities $\dot{q}$ during a path $q(t)$ which has no singularities, use $$\dot{q} = V^+(q) \dot{x}$$ with the pseudoinverse $V^+$.\\
+	Pseudoinverse for a $m \times n$ matrix $A$:
+	\begin{equation}
+	A^+ = 
+	\left\{ \begin{array}{lll}
+	A^T(AA^T)^{-1} & m \leq n & full row rank\\
+	A^{-1} & m = n & full row and colum rank\\
+	(A^T A)^{-1} A^T & m \geq n & full colum rank
+	\end{array} \right.
+	\end{equation}
+	
+	\subsubsection{Lagrange-Euler dynamics model}
+	The Lagrange-Euler dynamics model can be used to determine the torques that need to be applied to the actuators/joint motors to achieve a desired motion.
+	\paragraph{Lagrange-Euler equations} This is an algorithm that shows the calculation
+	% TODO add descriptions
+	\begin{enumerate}
+		\item Apply the D-H-algorithm
+		\item Set $T^0_0 = I$, $i = 1$, $D(q) = 0$
+		\item Find $\Delta c^i$, the homogeneous coordinates of the center of mass of link $i$ with respect to frame $L_i$
+		\item Let $L_c$ be the translation of frame $L_i$ to the center of mass of link $i$. Compute $\bar{D_i}$, the inertia tensor of link $i$ about its center of mass expressed with respect to frame $L_c$
+		\item Compute: $$z^{i-1}(q) = R^{i-1}_0(q) i^3$$
+		$$T^i_0(q) = T^{i-1}_0(q)T^i_{i-1}(q)$$
+		$$\bar{c}^i(q) = H_1 T^i_0(q) \Delta c^i$$
+		$$D_i(q) = R^i_0(q) \bar{D}_i [R^i_0(q)]^T$$
+		\item Compute $J^i(q)$
+		\item Partition $J^i(q)$ and compute: $$D(q) \leftarrow D(q) + [A^i(q)]^T m_i A^i(q) + [B^i(q)]^T D_i(q) B^i(q)$$
+		\item Set $i \leftarrow i + 1$. If $i \leq n$ go to step 3; else set $i = 1$ and continue.
+		\item Compute $C^i(q)$, $h_i(q)$ and $b_i(\dot{q})$
+		\item Formulate the $i$-th equation as:
+		$$ \sum_{j=1}^n D_{ij}(q) \ddot{q}_j + \sum_{k=1}^{n} \sum_{j=1}^{n} C^i_{kj}(q) \dot{q}_k \dot{q}_j + h_i(q) + b_i(\dot{q}) = \tau_i $$
+		\item Set $i \leftarrow i + 1$. If $i \leq n$ go to step 9.
+	\end{enumerate}
+	$\Rightarrow$ needs a lot of computation $\rightarrow$ the Newton-Euler equation (based on Newtonian mechanics) is used because it needs fewer mathematical operations
+
+	% TODO continue with chapter 07
 	
 	\section{Mobile robots}
 	\textbf{Castor wheel} is a wheel that can be aligned in every direction but is not steerable. It is used for stabilization.
