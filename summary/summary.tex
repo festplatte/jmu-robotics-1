@@ -88,7 +88,7 @@
 	\end{equation}
 	
 	
-	\subsubsection{Transformations}
+	\subsection{Transformations}
 	Describe how a coordinate frame is located in respect to a base reference frame.
 	\paragraph{Fundamental rotation matrices} $R_{n}(\phi)$ describes the rotation around the n axes with the angle $\phi$.\\
 	\begin{equation}
@@ -382,20 +382,147 @@
 	\end{enumerate}
 	$\Rightarrow$ needs a lot of computation $\rightarrow$ the Newton-Euler equation (based on Newtonian mechanics) is used because it needs fewer mathematical operations
 	
-	% TODO continue with chapter 07
-	
 	\section{Mobile robots}
+	Mobile robots are not fixed to a base like manipulators. They can move regarding their constraints in a pre-defined space.
+	
+	\subsection{Basics}
+	\textbf{Fixed wheel} is a wheel that is fixed above its rotation axis and is not steerable.
+	\textbf{Centerd steering wheel} looks like a fixed wheel but is steerable.
 	\textbf{Castor wheel} is a wheel that can be aligned in every direction but is not steerable. It is used for stabilization.
+	\textbf{Mechanum/Swedish wheel} is omnidirectional because of roles that are aligned in an 45 degree angle to the rotation direction and can move freely.\\
+	\textbf{Omnidirectional/spherical wheels} are hard to construct. They consist out of a ball which can move in any direction.\\
+	\textbf{Sliding}: wheels should not have a movement in $y$-direction (direction of the rotation axis)\\
+	\textbf{Slipping}: movement in $x$-direction should only be performed through wheel rotation\\
+	\textbf{Instantaneous center of curvature (ICC)} = instantaneous center of rotation (ICR): the point around the robot is rotating. Here all $y$-axes of the wheels should intersect to avoid slipping.\\
+	\textbf{Differential drive robot} has two fixed wheels with independently controllable velocities on the same axis. A castor wheel is added for stability. $\Rightarrow$ control inputs are $v_r$, $v_l$, fixed parameter $l$ defines the distance between the wheels (equations see lecture slides: chapter 07, slide 12ff)\\
+	\includegraphics[width=0.7\textwidth]{figures/differential-drive-robot.png}\\
+	\textbf{Synchro drive robot} has three steerable wheels that are parallel and turn with the same angle (to remain parallel) and rotate with the same velocity $\Rightarrow$ control inputs are velocity $v(t)$ and turning angle $\omega(t)$ (equations see lecture slides: chapter 07, slide 23ff)\\
+	\textbf{Tricycle robot} has two fixed back wheels on the same axis and one steerable front wheel which is driven (there's is also a back wheel driven tricycle) $\Rightarrow$ control inputs are the steering angle $\alpha$ and the velocity $v$, fixed parameters are $l$ (distance between the back wheels) and $d$ (distance between the back axis and the front axis) (equations see lecture slides: chapter 07, slide 26ff)\\
+	\textbf{Car-like robots/Ackermann steering} has two fixed back wheels that are driven on the same axis and two steerable front wheels. Since the steering angle of the two wheels relate to each other (to get an ICC) the model can be reduced to a back wheel driven tricycle which steering angle can be computed from one of the real steering angles $\Rightarrow$ control inputs are the steering angles $\alpha_l$ and $\alpha_r$ and the velocity $v$, fixed parameters are $l$ (distance between the back wheels) and $d$ (distance between the back axis and the front axis) (equations see lecture slides: chapter 07, slide 32ff)
+	
+	% TODO print lecture slides, chapter 07
+	
+	\subsection{Kinematic parameters}
+	The kinematic parameters are used to specify the exact characteristics of a certain robot:
+	\begin{itemize}
+		\item $P$ is the reference point located on the robot
+		\item $A$ mounting point of a wheel where it is connected to the robot case
+		\item $l$ distance between $P$ and $A$
+		\item $\alpha$ angle between $x_R$ and $\vec{PA}$
+		\item $\beta$ angle between $\vec{PA}$ and the wheel axis
+		\item $\varphi$ angular position of the wheel
+		\item $r$ radius of the wheel
+		\item $d$ offset between mounting and wheel center (only castor or off-centered steering wheel)
+		\item $\gamma$ angle of rollers between wheel plane and rollers' axis (only Mecanum/Swedish)
+	\end{itemize}
+	\includegraphics[width=0.5\textwidth]{figures/example-kinematic-parameters.png}
+	
 	\subsection{Direct kinematics}
+	Direct kinematics is the determination of the robots coordinates and orientation in the base coordinate frame when the values for the velocities and the steering angles are given.\\
+	\textbf{Coordinate frames} The inertial frame or base frame is called $L_I = {x_I, y_I}$ and the robot's frame is called $L_R = {x_R, y_R}$ (with $x_R$ aligned in the direction of movement)\\
+	\textbf{Robot's pose} is described by a vector $p(t)$ with $x$, $y$ denoting the position of $P$ in $L_I$ and $\theta$ as the rotation angle of $L_R$ w.r.t. $L_I$.
+	$$p(t) =
+	\begin{bmatrix}
+	x(t)\\
+	y(t)\\
+	\theta(t)
+	\end{bmatrix}$$
+	\textbf{Frame rotation} coordinates from $L_I$ can be converted to $L_R$ with $R(\theta)$ and with $R^{-1}(\theta)$ vice versa.
+	$$R_R^I(\theta) = R(\theta) = 
+	\begin{bmatrix}
+	\cos \theta & \sin \theta & 0\\
+	-\sin \theta & \cos \theta & 0\\
+	0 & 0 & 1
+	\end{bmatrix},
+	R_I^R(\theta) = R^{-1}(\theta) = 
+	\begin{bmatrix}
+	\cos \theta & -\sin \theta & 0\\
+	\sin \theta & \cos \theta & 0\\
+	0 & 0 & 1
+	\end{bmatrix}$$
+	\textbf{Kinematic model} describes the "pose velocity" $\dot{p}(t)$ with the control inputs. To obtain the pose $p(t)$ integrate the kinematic model.\\
+	Example for differential drive robot:
+	$$\dot{p}(t) = \dot{p}_I(t) = R^{-1}(\theta) \dot{p}_R(t) = R^{-1}(\theta)
+	\begin{bmatrix}
+	v(t)\\
+	0\\
+	\omega(t)
+	\end{bmatrix} = 
+	\begin{bmatrix}
+	v(t) \cos \theta(t)\\
+	v(t) \sin \theta(t)\\
+	\omega(t)
+	\end{bmatrix}$$
+	$$p(t) = 
+	\begin{bmatrix}
+	x(t)\\
+	y(t)\\
+	\theta(t)
+	\end{bmatrix} = 
+	\begin{bmatrix}
+	x(0) + \int_{0}^{t} v(\tau) \cos \theta(\tau) d \tau\\
+	y(0) + \int_{0}^{t} v(\tau) \sin \theta(\tau) d \tau\\\
+	\theta(0) + \int_{0}^{t} \omega(\tau) d \tau
+	\end{bmatrix}$$
+	
 	\subsection{Inverse kinematics}
+	Inverse kinematics describes the task to determine the robot's control inputs (velocities, steering angles) when the desired pose (coordinates and orientation) is given. Not all poses can be reached with one set of control inputs. It has to be on a circle or straight line to the robot's original pose.\\
+	To achieve the inputs to arbitrary poses, split the motion into segments where only some of the inputs are varied (e.g. rotation, straight line motion, rotation).\\
+	Example for differential drive: Move from $[x_0, y_0, \theta_0]^T$ to $[x_3, y_3, \theta_3]^T$
+	\begin{enumerate}
+		\item $[x_0, y_0] = [x_1, y_1]$, $\tan \theta_1 = \frac{y_3 - y_0}{x_3 - x_0} \Rightarrow \theta_1 = \arctan2(y_3 - y_0, x_3 - x_0)$\\
+		$v_r = -v_l = v_1 \Rightarrow \delta t_1 = \frac{(\theta_1 - \theta_0)l}{2 v_1}$
+		\item $[x_2, y_2] = [x_3, y_3]$, $v_r = v_l = v_2 \Rightarrow \delta t_2 = \frac{\sqrt{(x_2 - x_0)^2 + (y_2 - y_0)^2}}{v_2}$
+		\item $[x_2, y_2] = [x_3, y_3]$, $v_r = -v_l = v_3 \Rightarrow \delta t_3 = \frac{(\theta_3 - \theta_1)l}{2 v_3}$
+	\end{enumerate}
+
+	\subsection{Robot's constraints}
+	\textbf{Holonomic constraints} do not depend on the velocity $\dot{q}$ but on the pose $p$. They reduce the number of generalized coordinates by one.\\
+	\textbf{Holonomic robots} can control the total DOFs. (can be achieved with swedish or omnidirectional wheels)\\
+	\textbf{Non-holonomic constraints} depend on the velocity $\dot{q}$ and the pose $p$.\\
+	\textbf{Non-holonomic robots} can control less than the total numbers of DOFs. (this applies to all presented robots, because $\dot{y}_R = 0$)
+	$$\begin{bmatrix}
+	\dot{x}_R(t)\\
+	\dot{y}_R(t)\\
+	\dot{\theta}_R(t)\\
+	\end{bmatrix} = 
+	\begin{bmatrix}
+	\cos \theta & \sin \theta & 0\\
+	-\sin \theta & \cos \theta & 0\\
+	0 & 0 & 1
+	\end{bmatrix}
+	\begin{bmatrix}
+	\dot{x}(t)\\
+	\dot{y}(t)\\
+	\dot{\theta}(t)\\
+	\end{bmatrix} = 
+	\begin{bmatrix}
+	\dot{x}(t) \cos \theta(t) + \dot{y}(t) \sin \theta(t)\\
+	-\dot{x}(t) \sin \theta(t) + \dot{y}(t) \cos \theta(t)\\
+	\dot{\theta}(t)\\
+	\end{bmatrix}$$
+	$$\Rightarrow G(q, \dot{q}, t) = -\dot{x}(t) \sin \theta(t) + \dot{y}(t) \cos \theta(t) = 0$$
+	\textbf{Wheel constraint} a wheel should not slide in $y$ direction. This can be checked with:
+	$$\dot{x}_R \cos(\alpha + \beta) + \dot{y}_R \sin(\alpha + \beta) + l \dot{\theta} \sin \beta = 0$$
+	A wheel should also not slip in $x$ direction. This can be checked with:
+	$$-\dot{x}_R \sin(\alpha + \beta) + \dot{y}_R \cos(\alpha + \beta) + l \dot{\theta} \cos \beta + r \dot{\varphi} = 0$$
+	(for castor and Swedish wheels, see chapter 07, slide 57ff)\\
+	\textbf{Kinematic constraints} To determine if the robot is sliding or slipping, all wheel constraints can be formalized in matrix form (see chapter 07, slide 61ff) which has then to be 0 to proof the existence of an ICC.\\
+	To get the number of independent constraints, calculate: $rank(C_1^*(\beta_S))$\\
+		
 	\subsection{Classification}
-	$\sigma_S$ is the number of independent controllable steering angles\\
-	$\sigma_M$ is the number of independent controllable motors to power the wheels\\
-	$\dot{p} = R^T(\theta) \Sigma \eta(t)$\\
+	\textbf{Degree of mobility} measures the number of DOFs that can immediately be manipulated through changes of the wheel velocities: $\delta_m = 3 - rank(C_1^*(\beta_S))$ with $0 \leq \delta_m \leq 3$\\
+	\textbf{Degree of steerability} measures the number of DOFs that can immediately be manipulated through changes of the steering angles. That equals to the number of independently controllable steering angles: $\delta_s = rank(C_{1s}(\beta_s))$\\
+	\textbf{Degree of Maneuverability} is the sum of the DOFs that a robot can manipulate: $\delta_M = \delta_m + \delta_s$\\
+	\includegraphics[width=\linewidth]{figures/robots-dofs.png}\\
+	If $\delta_M = 2$ the ICC is constraint to a line, if $\delta_M = 3$ it can be chosen arbitrarily. If a robot has more than one fixed wheel they have to be on the same axis which can't be the axis of the steering wheels.\\
+	\textbf{Classification} is done by the tuple of $(\delta_m, \delta_s)$\\
 	\\
 	\textbf{Follow the carrot} Method of reaching a goal that keeps the robot moving\\
 	current position: $(x, y, \theta)^T$, goal position: $(x_L, y_L)^T$\\
 	$\delta x = x_L - x$\\
 	$\delta y = y_L - y$\\
 	$\theta_L = \arctan2(\delta y, \delta x)$
+	
+	% TODO continue with chapter 08
 \end{document}
