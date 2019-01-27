@@ -516,13 +516,36 @@
 	\textbf{Degree of Maneuverability} is the sum of the DOFs that a robot can manipulate: $\delta_M = \delta_m + \delta_s$\\
 	\includegraphics[width=\linewidth]{figures/robots-dofs.png}\\
 	If $\delta_M = 2$ the ICC is constraint to a line, if $\delta_M = 3$ it can be chosen arbitrarily. If a robot has more than one fixed wheel they have to be on the same axis which can't be the axis of the steering wheels.\\
-	\textbf{Classification} is done by the tuple of $(\delta_m, \delta_s)$\\
-	\\
+	\textbf{Classification} is done by the tuple of $(\delta_m, \delta_s)$
+	
+	\subsection{Path planning}
+	The goal of path planning is to find a path $\tau$ for the robot $\mathcal{A}$ from an initial $\tau(0) = q_{init}$ to a final pose $\tau(1) = q_{goal}$ in a workspace $\mathcal{W} \subset \R^N$ where there are $\mathcal{B}_1, ..., \mathcal{B}_n$ fixed objects (obstacles) which positions and geometry are known. Then configuration space $\mathcal{C}$ for $\mathcal{A}$ contains all possible configurations for $q$.\\
+	\textbf{$\mathcal{C}$-obstacle} is the space including and around an obstacle $\mathcal{B}_i$ where the fixed point $P$ of $\mathcal{A}$ can't be located so that the robot case doesn't hit the obstacle. It's called $\mathcal{CB}_i$. The parts of $\mathcal{W}$ that remains (no $\mathcal{CB}_i$ intersect) is called $\mathcal{C}_{free}$. If one only subtracts the obstacles from $\mathcal{W}$ the remaining space is called $\Omega$.\\
+	\includegraphics[width=\linewidth]{figures/c-obstacle.png}\\
+	\textbf{Cell decomposition} split up $\Omega$ into simple regions $k_i$ called cells that are connected through links if they are adjacent. They can then be seen as nodes in a connectivity graph. Separate the cells either exact or to fit predefined shape.\\
+	\textbf{Classification of cells}
+	\begin{enumerate}
+		\item $\mathrm{int}(k_i) \cap \mathcal{CB} = \emptyset$ is called empty cell
+		\item $k_i \subseteq \mathcal{CB}$ is called full (fully contained in $\mathcal{C}$-obstacle region
+		\item mixed $\Rightarrow$ else
+	\end{enumerate}
+	\textbf{Channel} is a sequence of empty and mixed cells that connects a start with an end point through the connectivity graph. If it contains only empty cells it's called E-channel (every path possible), else it's called M-channel (no guarantees for a free path). $\Rightarrow$ refine the decomposition to generate an E-channel from a M-channel.
+	\begin{itemize}
+		\item Compute a rectangloid decomposition $P_1$ of $\Omega$. Set $i$ to 1.
+		\item Search the connectivity graph $G_i$ for $P_i$ for a channel $\Pi_i$ connecting $q_{init}$ with $q_{goal}$. If it's an E-channel return success, continue for a M-channel, else return failure.
+		\item Compute a rectangloid decomposition for every mixed cell $k$ in $\Pi_i$. Set $i$ to $i+1$. Go to Step 2.
+	\end{itemize}
+	\textbf{Tree representation}: A decomposition of $\Omega$ can be displayed as a tree with degree $2^m$ where only mixed cells have successors. All successors of a cell $k$ have the same size with half the length of the sides.\\
+	\textbf{Hierarchical graph searching} Start with the first layer of the tree with a path $\Pi_i$ which connects $q_{init}$ with $q_{goal}$.
+	\begin{itemize}
+		\item If cell $k$ is empty, copy to $\Pi_{i+1}$
+		\item If cell $k$ is mixed search the successors for a path through $k$
+	\end{itemize}
+	\textbf{Potential field methods} Build a map that uses "natural forces" that are influenced by the obstacles to guide the robot to the goal, e.g. like waves flowing from start to goal or gravity around the "obstacle mountains". This splits up to attracting and repulsive forces. This method does local optimizing and is not global like the decomposition. $\Rightarrow$ local minima like dead-ends need to be avoided (e.g. follow the wall to overcome)\\
 	\textbf{Follow the carrot} Method of reaching a goal that keeps the robot moving\\
 	current position: $(x, y, \theta)^T$, goal position: $(x_L, y_L)^T$\\
 	$\delta x = x_L - x$\\
 	$\delta y = y_L - y$\\
 	$\theta_L = \arctan2(\delta y, \delta x)$
-	
-	% TODO continue with chapter 08
+
 \end{document}
