@@ -535,7 +535,9 @@
 		\item Search the connectivity graph $G_i$ for $P_i$ for a channel $\Pi_i$ connecting $q_{init}$ with $q_{goal}$. If it's an E-channel return success, continue for a M-channel, else return failure.
 		\item Compute a rectangloid decomposition for every mixed cell $k$ in $\Pi_i$. Set $i$ to $i+1$. Go to Step 2.
 	\end{itemize}
-	\textbf{Tree representation}: A decomposition of $\Omega$ can be displayed as a tree with degree $2^m$ where only mixed cells have successors. All successors of a cell $k$ have the same size with half the length of the sides.\\
+	\textbf{Tree representation}: A decomposition of $\Omega$ can be displayed as a tree with degree $2^m$ where only mixed cells have successors. All successors of a cell $k$ have the same size with half the length of the sides. This is called quadtree.\\
+	\textbf{Labeling algorithm}\\
+	\includegraphics[width=\linewidth]{figures/labeling-algorithm.png}\\
 	\textbf{Hierarchical graph searching} Start with the first layer of the tree with a path $\Pi_i$ which connects $q_{init}$ with $q_{goal}$.
 	\begin{itemize}
 		\item If cell $k$ is empty, copy to $\Pi_{i+1}$
