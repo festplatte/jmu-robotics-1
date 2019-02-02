@@ -174,8 +174,8 @@
 		\item If $M$ is rotated about or translated along a unit vector of $F$, \textbf{premultiply} homogenous transformation matrix to $T$
 		\item If $M$ is rotated about or translated along a unit vector of $M$, \textbf{postmultiply} homogenous transformation matrix to $T$
 	\end{enumerate}
-	
-	% TODO: how to transform coodinates from one frame to another?
+	This results in the matrix $T_F^M$ mapping coordinates from the mobile coordinate frame $M$ to the fixed one $F$:
+	$$[p]^F = T_F^M [p]^M$$
 	
 	\paragraph{Inverse homogenous transformation} If the transformation matrix $T$ maps coordinates from coordinate frame $A$ to $B$, the inverse $T^{-1}$ maps coodinates from $B$ to $A$.
 	\begin{equation}
