@@ -464,7 +464,7 @@
 	
 	\subsection{Inverse kinematics}
 	Inverse kinematics describes the task to determine the robot's control inputs (velocities, steering angles) when the desired pose (coordinates and orientation) is given. Not all poses can be reached with one set of control inputs. It has to be on a circle or straight line to the robot's original pose.\\
-	To achieve the inputs to arbitrary poses, split the motion into segments where only some of the inputs are varied (e.g. rotation, straight line motion, rotation).\\
+	To calculate the inputs to arbitrary poses, split the motion into segments where only some of the inputs are varied (e.g. rotation, straight line motion, rotation).\\
 	Example for differential drive: Move from $[x_0, y_0, \theta_0]^T$ to $[x_3, y_3, \theta_3]^T$
 	\begin{enumerate}
 		\item $[x_0, y_0] = [x_1, y_1]$, $\tan \theta_1 = \frac{y_3 - y_0}{x_3 - x_0} \Rightarrow \theta_1 = \arctan2(y_3 - y_0, x_3 - x_0)$\\
