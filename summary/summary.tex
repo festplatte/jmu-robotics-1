@@ -499,12 +499,47 @@
 	\dot{\theta}(t)\\
 	\end{bmatrix}$$
 	$$\Rightarrow G(q, \dot{q}, t) = -\dot{x}(t) \sin \theta(t) + \dot{y}(t) \cos \theta(t) = 0$$
-	\textbf{Wheel constraint} a wheel should not slide in $y$ direction. This can be checked with:
-	$$\dot{x}_R \cos(\alpha + \beta) + \dot{y}_R \sin(\alpha + \beta) + l \dot{\theta} \sin \beta = 0$$
-	A wheel should also not slip in $x$ direction. This can be checked with:
-	$$-\dot{x}_R \sin(\alpha + \beta) + \dot{y}_R \cos(\alpha + \beta) + l \dot{\theta} \cos \beta + r \dot{\varphi} = 0$$
-	(for castor and Swedish wheels, see chapter 07, slide 57ff)\\
-	\textbf{Kinematic constraints} To determine if the robot is sliding or slipping, all wheel constraints can be formalized in matrix form (see chapter 07, slide 61ff) which has then to be 0 to proof the existence of an ICC.\\
+	\textbf{Wheel constraint} a wheel should not slide in $y$ direction. This can be checked with:\\
+	\underline{Fixed {or centered} steering wheels:}
+	$$
+	\begin{bmatrix}
+	\cos(\alpha + \beta) & \sin(\alpha + \beta) & l \sin \beta\\
+	\end{bmatrix} R(\theta) \dot{p} = 0
+	$$
+	\underline{Castor:}
+	$$
+	\begin{bmatrix}
+	\cos(\alpha + \beta) & \sin(\alpha + \beta) & d + l \sin \beta\\
+	\end{bmatrix} R(\theta) \dot{p} + d \dot{\beta} = 0
+	$$
+	\underline{Mecanum/Swedish:}
+	$$
+	\begin{bmatrix}
+	-\sin(\alpha + \beta + \gamma) & \cos(\alpha + \beta + \gamma) & l \cos(\beta + \gamma)\\
+	\end{bmatrix} R(\theta) \dot{p} + r \dot{\varphi} \cos \gamma = 0
+	$$
+	A wheel should also not slip in $x$ direction. This can be checked with the rolling constraints $\rightarrow$ see lecture 7, slides 56ff.\\
+	\textbf{Kinematic constraints} To determine if the robot is sliding (slipping see lecture 07, slides 61ff), all wheel constraints can be formalized in matrix form which has then to be 0 to proof the existence of an ICC.
+	$$C_1(\beta_s, \beta_c)R(\theta)\dot{p} + C_2 \dot{\beta}_c = 0$$
+	Sliding constraint for fixed and steerable wheels is: $C_1^*(\beta_s) R(\theta) \dot{p} = 0$ with\\
+	$$C_1(\beta_s, \beta_c) = 
+	\begin{bmatrix}
+	C_{1f}\\
+	C_{1s}(\beta_s)\\
+	C_{1c}(\beta_c)\\
+	\end{bmatrix},
+	C_1^*(\beta_s) = 
+	\begin{bmatrix}
+	C_{1f}\\
+	C_{1s}(\beta_s)\\
+	\end{bmatrix}$$
+	$$C_2 = 
+	\begin{bmatrix}
+	0 & ... & 0\\
+	... & ... & 0\\
+	0 & 0 & 0\\
+	& C_{2c} &\\
+	\end{bmatrix} \in \R^{(N_f + N_s + N_c) \times N_c}$$
 	To get the number of independent constraints, calculate: $rank(C_1^*(\beta_S))$\\
 		
 	\subsection{Classification}
@@ -540,11 +575,6 @@
 		\item If cell $k$ is empty, copy to $\Pi_{i+1}$
 		\item If cell $k$ is mixed search the successors for a path through $k$
 	\end{itemize}
-	\textbf{Potential field methods} Build a map that uses "natural forces" that are influenced by the obstacles to guide the robot to the goal, e.g. like waves flowing from start to goal or gravity around the "obstacle mountains". This splits up to attracting and repulsive forces. This method does local optimizing and is not global like the decomposition. $\Rightarrow$ local minima like dead-ends need to be avoided (e.g. follow the wall to overcome)\\
-	\textbf{Follow the carrot} Method of reaching a goal that keeps the robot moving\\
-	current position: $(x, y, \theta)^T$, goal position: $(x_L, y_L)^T$\\
-	$\delta x = x_L - x$\\
-	$\delta y = y_L - y$\\
-	$\theta_L = \arctan2(\delta y, \delta x)$
+	\textbf{Potential field methods} Build a map that uses "natural forces" that are influenced by the obstacles to guide the robot to the goal, e.g. like waves flowing from start to goal or gravity around the "obstacle mountains". This splits up to attracting and repulsive forces. This method does local optimizing and is not global like the decomposition. $\Rightarrow$ local minima like dead-ends need to be avoided (e.g. follow the wall to overcome)
 
 \end{document}
